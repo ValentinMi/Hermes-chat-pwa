@@ -17,7 +17,7 @@ const isProd = process.env.NODE_ENV === "production";
 export const config = {
   isProd,
   // Port du serveur. En dev, Vite proxifie /api vers ce port.
-  port: Number(process.env.PORT ?? process.env.API_PORT ?? (isProd ? 3000 : 8787)),
+  port: Number(process.env.PORT ?? process.env.API_PORT ?? (isProd ? 3001 : 8787)),
 
   // Endpoint Hermes compatible OpenAI, ex: http://hermes:8642/v1
   hermesBaseUrl: required("HERMES_BASE_URL", isProd ? undefined : "http://localhost:8642/v1").replace(/\/$/, ""),

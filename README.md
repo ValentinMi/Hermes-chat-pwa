@@ -75,7 +75,7 @@ Voir [`.env.example`](./.env.example).
   réseau Docker et pointe `HERMES_BASE_URL` sur `http://<nom-du-service>:8642/v1`.
 - **Hermes Agent sur l'hôte** : `HERMES_BASE_URL=http://host.docker.internal:8642/v1`
   (sous Linux, ajouter `host.docker.internal:host-gateway` dans `extra_hosts`).
-- **Tout dans un compose** : voir [`docker-compose.yml`](./docker-compose.yml),
+- **Tout dans un compose** : voir [`docker-compose.yaml`](./docker-compose.yaml),
   qui contient un exemple de service `nousresearch/hermes-agent` commenté.
 
 Démarrer le gateway Hermes Agent (référence) :

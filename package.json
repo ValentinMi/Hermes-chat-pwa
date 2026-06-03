@@ -1,0 +1,46 @@
+{
+  "name": "hermes-chat-pwa",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "PWA de chat pour discuter avec un agent Hermes (Nous Research) — frontend React/TanStack + proxy Hono.",
+  "scripts": {
+    "dev": "concurrently -k -n web,api -c cyan,magenta \"npm:dev:web\" \"npm:dev:api\"",
+    "dev:web": "vite",
+    "dev:api": "tsx watch server/index.ts",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "start": "NODE_ENV=production tsx server/index.ts",
+    "typecheck": "tsc -b --noEmit"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.13.7",
+    "@tanstack/react-query": "^5.62.7",
+    "@tanstack/react-router": "^1.95.1",
+    "@tanstack/react-store": "^0.7.0",
+    "@tanstack/store": "^0.7.0",
+    "hono": "^4.6.14",
+    "idb-keyval": "^6.2.1",
+    "react": "^18.3.1",
+    "tsx": "^4.19.2",
+    "react-dom": "^18.3.1",
+    "react-markdown": "^9.0.1",
+    "rehype-highlight": "^7.0.1",
+    "remark-gfm": "^4.0.0"
+  },
+  "devDependencies": {
+    "@tanstack/router-devtools": "^1.95.1",
+    "@types/node": "^22.10.2",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^9.1.0",
+    "highlight.js": "^11.10.0",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.5",
+    "vite-plugin-pwa": "^0.21.1"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

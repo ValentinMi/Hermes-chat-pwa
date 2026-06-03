@@ -1,0 +1,32 @@
+# Déploiement de la PWA seule. Coolify peut utiliser ce compose ou directement
+# le Dockerfile. Renseigner les variables dans l'UI Coolify (ou un fichier .env).
+services:
+  hermes-chat:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      HERMES_BASE_URL: ${HERMES_BASE_URL:-http://host.docker.internal:8642/v1}
+      HERMES_API_KEY: ${HERMES_API_KEY:-}
+      HERMES_DEFAULT_MODEL: ${HERMES_DEFAULT_MODEL:-hermes-4}
+      APP_PASSWORD: ${APP_PASSWORD:?defini APP_PASSWORD}
+      SESSION_SECRET: ${SESSION_SECRET:?defini SESSION_SECRET}
+    # Si le gateway Hermes Agent tourne sur l'hôte (et non en conteneur voisin),
+    # décommenter pour résoudre host.docker.internal sous Linux :
+    # extra_hosts:
+    #   - "host.docker.internal:host-gateway"
+
+# Exemple : faire tourner le gateway Hermes Agent dans le même compose.
+# Décommenter, puis pointer HERMES_BASE_URL sur http://hermes:8642/v1
+#
+#  hermes:
+#    image: nousresearch/hermes-agent
+#    command: gateway run
+#    restart: unless-stopped
+#    volumes:
+#      - hermes-data:/opt/data
+#    # Pas besoin d'exposer 8642 publiquement : réseau interne au compose.
+#
+# volumes:
+#   hermes-data:

@@ -12,7 +12,7 @@ RUN npm run build
 FROM node:22-alpine AS runtime
 WORKDIR /app
 ENV NODE_ENV=production
-ENV PORT=3000
+ENV PORT=3001
 
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev && npm cache clean --force
@@ -22,10 +22,10 @@ COPY server ./server
 COPY shared ./shared
 COPY --from=build /app/dist ./dist
 
-EXPOSE 3000
+EXPOSE 3001
 
 # Coolify peut s'appuyer sur ce healthcheck.
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-  CMD wget -qO- http://localhost:3000/api/session > /dev/null 2>&1 || exit 1
+  CMD wget -qO- http://localhost:3001/api/session > /dev/null 2>&1 || exit 1
 
 CMD ["npm", "start"]

@@ -56,7 +56,7 @@ npm run typecheck   # vérification de types seule
 | `HERMES_DEFAULT_MODEL` |   —    | Modèle par défaut (défaut `hermes-4`)                             |
 | `APP_PASSWORD`         |   ✅   | Mot de passe d'accès à l'app                                      |
 | `SESSION_SECRET`       |   ✅   | Secret de signature des cookies (`openssl rand -hex 32`)          |
-| `PORT`                 |   —    | Port d'écoute (défaut `3000`)                                     |
+| `PORT`                 |   —    | Port d'écoute (défaut `3001`)                                     |
 | `SESSION_MAX_AGE`      |   —    | Durée de session en secondes (défaut 30 j)                        |
 
 Voir [`.env.example`](./.env.example).
@@ -64,7 +64,7 @@ Voir [`.env.example`](./.env.example).
 ## Déploiement sur Coolify
 
 1. **New Resource → Application** depuis ce dépôt Git (branche de ton choix).
-2. **Build Pack : Dockerfile** (présent à la racine). Coolify détecte le port `3000`.
+2. **Build Pack : Dockerfile** (présent à la racine). Coolify détecte le port `3001`.
 3. Renseigner les variables d'environnement ci-dessus dans l'onglet *Environment*.
 4. (Optionnel) Brancher un domaine + HTTPS via le proxy intégré de Coolify.
 5. Déployer. Le healthcheck `/api/session` indique l'état du service.

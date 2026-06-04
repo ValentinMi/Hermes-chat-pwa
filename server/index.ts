@@ -110,25 +110,54 @@ app.post("/api/chat", async (c) => {
       body: JSON.stringify(upstreamBody),
     });
   } catch (err) {
-    return c.json(
-      { error: `Impossible de joindre Hermes: ${(err as Error).message}` },
-      502,
-    );
+    const msg = `Impossible de joindre Hermes à ${config.hermesBaseUrl} : ${(err as Error).message}`;
+    console.error("[chat]", msg);
+    return c.json({ error: msg }, 502);
   }
 
   if (!upstream.ok || !upstream.body) {
     const detail = await upstream.text().catch(() => "");
+    console.error(`[chat] Hermes a répondu ${upstream.status}: ${detail.slice(0, 500)}`);
     return c.json({ error: `Erreur Hermes (${upstream.status}): ${detail}` }, 502);
   }
 
   // On relaie le flux SSE tel quel au navigateur.
+  // NB : pas d'en-têtes hop-by-hop (Connection/Transfer-Encoding) qui perturbent
+  // les reverse-proxies ; X-Accel-Buffering désactive la mise en tampon (nginx).
   return new Response(upstream.body, {
     headers: {
       "Content-Type": "text/event-stream; charset=utf-8",
       "Cache-Control": "no-cache, no-transform",
-      Connection: "keep-alive",
+      "X-Accel-Buffering": "no",
     },
   });
+});
+
+/* Diagnostic de connectivité vers Hermes (auth requise). */
+app.get("/api/diag", async (c) => {
+  if (!(await isAuthenticated(c))) return c.json({ error: "Non authentifié." }, 401);
+  const url = `${config.hermesBaseUrl}/models`;
+  try {
+    const res = await fetch(url, {
+      headers: hermesHeaders(),
+      signal: AbortSignal.timeout(8000),
+    });
+    const text = await res.text().catch(() => "");
+    return c.json({
+      ok: res.ok,
+      target: url,
+      status: res.status,
+      hasApiKey: Boolean(config.hermesApiKey),
+      body: text.slice(0, 800),
+    });
+  } catch (err) {
+    return c.json({
+      ok: false,
+      target: url,
+      hasApiKey: Boolean(config.hermesApiKey),
+      error: (err as Error).message,
+    });
+  }
 });
 
 /* ------------------------------------------------------------------ *
